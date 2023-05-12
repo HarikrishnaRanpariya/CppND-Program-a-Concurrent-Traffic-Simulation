@@ -69,6 +69,7 @@ private:
     std::condition_variable _condition;
     std::mutex _mutex;
     std::vector<std::future<void>> futures;
+    int randomWithRange(int min, int max);
     bool flag;
 };
 

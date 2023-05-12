@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include "TrafficLight.h"
 
+
+std::random_device rd;
+std::mt19937 gen(rd());
+
 /* Implementation of class "MessageQueue" */
 template <typename T>
 T MessageQueue<T>::receive()
@@ -17,7 +21,7 @@ T MessageQueue<T>::receive()
 
     // remove last vector element from queue
     T msg = std::move(_queue.back());
-    _queue.pop_back();
+    _queue.clear();
 
     return msg; // will not be copied due to return value optimization (RVO) in C++
 }
@@ -41,11 +45,19 @@ void MessageQueue<T>::send(T &&msg)
 
 }
 
+
 /* Implementation of class "TrafficLight" */
 TrafficLight::TrafficLight()
 {
     _currentPhase = TrafficLightPhase::red;
     flag = false;
+}
+
+// Generate random number from given range
+int TrafficLight::randomWithRange(int min, int max)
+{
+    std::uniform_int_distribution<> dist(min, max);
+    return dist(gen);
 }
 
 void TrafficLight::waitForGreen()

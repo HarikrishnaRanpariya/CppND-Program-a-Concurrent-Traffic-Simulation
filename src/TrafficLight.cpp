@@ -34,9 +34,10 @@ void MessageQueue<T>::send(T &&msg)
     // perform vector modification under the lock
     std::lock_guard<std::mutex> uLock(_mutex);
 
-    // add vector to queue
-    _queue.push_back(std::move(msg));
-    _condition.notify_one(); // notify client after pushing new Vehicle into vector
+    // add msg to queue
+    _queue.clear();
+    _queue.emplace_back(std::move(msg));
+    _condition.notify_one();
 
 }
 
@@ -103,10 +104,7 @@ void TrafficLight::cycleThroughPhases()
       std::chrono::duration<double> elapsed_seconds = currUpdate - lastUpdate;
 
       srand((unsigned) time(NULL));
-      unsigned random =  4 + (rand() % 6);
-      //Hari: if I use below random number generator then simulation behavior completely mess up
-      //unsigned random =  1 + (rand() % 9);
-      // am I missing somehting? why does it shows wrong behavior if I change range of random nuber?
+      unsigned random =  4 + (rand() % 3);
 
       if (elapsed_seconds.count() > random)
       {
